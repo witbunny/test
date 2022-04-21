@@ -1,0 +1,51 @@
+<html>
+
+<head>
+    <script src="http://mockjs.com/dist/mock.js"></script>
+    <script>
+        // Mock.mock("/", {
+        //     // sname: "leo",
+        //     // age: 12,
+        //     // isfemale: true
+        //     "sname|2-5": "x",
+        //     "age|10-100": 1,
+        //     "number|1-100.1-10": 1,
+
+        //     "title": "@ctitle()",
+        //     "paragraph": "@paragraph()",
+
+        //     name: "@cname()",
+        //     idcard: "@id()",
+        //     address: "@city(true)",
+        //     time: "@date(yyyy-MM-dd hh:mm:ss)",
+
+        //     "ids|5": [
+        //         { idcard: '@id()' }
+        //     ],
+        //     "id": /\d+/
+        // });
+        // Mock.setup({ timeout: 4000 });
+        var m = Mock.mock(/\/Student\/\d+$/i,
+            "get",
+            function (options) {
+                return {};
+            });
+
+    </script>
+</head>
+
+<body>
+    <h1>ajax</h1>
+    <script>
+        var xhttp = new XMLHttpRequest();
+        xhttp.open("GET", "/student/2");
+        xhttp.send();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState === 4 && this.status === 200) {
+                console.log(this.responseText);
+            }
+        };
+    </script>
+</body>
+
+</html>
