@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="vue.js"></script>
+</head>
+
+<body>
+    <!-- <div id="act-app" style="padding: 20px; border: 1px solid red;" v-on:click="outer">
+        <div style="border: 1px solid red;" v-on:click.stop="inner">inner</div>
+    </div> -->
+
+    <div id="act-app" style="padding: 20px; border: 1px solid red;" v-on:click.self="outer">
+        <a href="about:blank" style="border: 1px solid red;" v-on:click.prevent="inner">inner</a>
+
+        <input type="text" v-on:keyup.enter="inner">
+        <input type="text" v-on:keyup.alt.c="inner">
+    </div>
+
+    <script>
+        var vm = new Vue({
+            el: "#act-app",
+            data: {
+
+            },
+            methods: {
+                outer: function (event) {
+                    console.log("outer");
+                },
+                inner: function (event) {
+                    console.log("inner");
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
