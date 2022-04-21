@@ -26,7 +26,7 @@
         <span v-show="shown">hello, welcome</span>
         <button type="button" v-on:click="toggle">提交</button>
 
-        <span class="target" v-on:mouseover="hideshow" v-on:mouseout="hidehide" :title="title">hello, welcome</span>
+        <span class="target" ref="slagon" v-on:mouseover="hideshow" v-on:mouseout="hidehide" :title="title">hello, welcome</span>
         <span class="tooltip" v-if="hide">{{title}}</span>
     </div>
 
@@ -36,15 +36,22 @@
             data: {
                 shown: true,
                 hide: false,
-                title: "go"
+                title: "go",
+                timer: 0
             },
             methods: {
                 toggle: function () {
                     this.shown = !this.shown;
                 },
                 hideshow: function (event) {
-                    event.preventDefault();
+                    // event.preventDefault();
                     this.hide = true;
+                    this.timer++;
+                    this.title = this.title + "-" + this.timer;
+                    this.$nextTick(function () {
+                        // document.getElementById("slagon").title = "";
+                        this.$refs.slagon.title = "";
+                    });
                 },
                 hidehide: function () {
                     this.hide = false;
