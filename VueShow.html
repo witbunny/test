@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="vue.js"></script>
+    <style>
+        .tooltip {
+            background-color: cadetblue;
+            position: relative;
+            top: -25px;
+            left: -90px;
+        }
+
+        .target {
+            display: inline-block;
+            margin-top: 50px;
+            border: 1px solid red;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="act-app">
+        <span v-show="shown">hello, welcome</span>
+        <button type="button" v-on:click="toggle">提交</button>
+
+        <span class="target" v-on:mouseover="hideshow" v-on:mouseout="hidehide" :title="title">hello, welcome</span>
+        <span class="tooltip" v-if="hide">{{title}}</span>
+    </div>
+
+    <script>
+        var vm = new Vue({
+            el: "#act-app",
+            data: {
+                shown: true,
+                hide: false,
+                title: "go"
+            },
+            methods: {
+                toggle: function () {
+                    this.shown = !this.shown;
+                },
+                hideshow: function (event) {
+                    event.preventDefault();
+                    this.hide = true;
+                },
+                hidehide: function () {
+                    this.hide = false;
+                }
+            }
+        });
+
+    </script>
+</body>
+
+</html>

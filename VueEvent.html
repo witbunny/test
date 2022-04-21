@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="vue.js"></script>
+</head>
+
+<body>
+    <div id="act-app">
+        <!-- <h1 v-on:click="counter++">{{counter}}</h1> -->
+        <h1 v-on:click="plus(2)">{{counter}}</h1>
+
+        <h1 v-on:click="showev">showev</h1>
+        <h1 v-on:click="showev($event)">showev</h1>
+
+        <h1 v-on:click="multiple($event, 2)">multiple</h1>
+        <h1 v-on:click="multiple(2, $event)">multiple</h1>
+    </div>
+
+
+    <script>
+        var vm = new Vue({
+            el: "#act-app",
+            data: {
+                counter: 10
+            },
+            methods: {
+                plus: function (num) {
+                    this.counter += num;
+                },
+                showev: function (ev) {
+                    console.log(ev);
+                    let self = ev.target;
+                    self.style = "color: red";
+                },
+                multiple: function (ev, num) {
+                    console.log(ev);
+                    console.log(num);
+                }
+            }
+        });
+
+    </script>
+</body>
+
+</html>
