@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="vue.js"></script>
+</head>
+
+<body>
+    <form id="act-app" novalidate v-on:submit="checkAll">
+        <div>
+            <label for="">用户名：</label>
+            <input type="text" v-model="sname.value" v-on:keyup="checkOne" :check="sname.name" ref="sname">
+            <p v-if="sname.error" style="color: red;">{{sname.error}}</p>
+        </div>
+        <div>
+            <label for="">密码：</label>
+            <input type="text" v-model="password.value" v-on:keyup="checkOne" :check="password.name" ref="password">
+            <p v-if="password.error" style="color: red;">{{password.error}}</p>
+        </div>
+        <div>
+            <label for="">确认密码：</label>
+            <input type="text" v-model="confirmpw.value" v-on:keyup="checkOne" :check="confirmpw.name" :ref="confirmpw.name">
+            <p v-if="confirmpw.error" style="color: red;">{{confirmpw.error}}</p>
+        </div>
+
+        <button type="submit">提交</button>
+    </form>
+
+    <script>
+        var vm = new Vue({
+            el: "#act-app",
+            data: {
+                sname: {
+                    value: "",
+                    error: "",
+                    name: "sname",
+                    sub: "* 用户名",
+                    check: "required four"
+                },
+                password: {
+                    value: "",
+                    error: "",
+                    name: "password",
+                    sub: "* 密码",
+                    check: "required four"
+                },
+                confirmpw: {
+                    value: "",
+                    error: "",
+                    name: "confirmpw",
+                    sub: "* 确认密码",
+                    check: "required same"
+                },
+                suberror: {
+                    required: "不能为空",
+                    four: "不能小于4个",
+                    same: "必须与密码相同"
+                }
+            },
+            methods: {
+                checkAll: function (event) {
+                    // var oForm = document.getElementById("act-app");
+                    // var aInput = oForm.getElementsByTagName("input");
+                    // for (const ctr of aInput) {
+                    //     this.check(ctr);
+                    // }
+                    for (const key in this.$refs) {
+                        this.check(this.$refs[key]);
+                    }
+                    
+                    for (const key in this.$data) {
+                        if (this.$data[key].error) {
+                            event.preventDefault();
+                            return;
+                        }
+                    }
+                },
+                checkOne: function (event) {
+                    this.check(event.target);
+                },
+                check: function (self) {
+                    var selfdata = this.$data[self.attributes['check'].value];
+                    var emptymsg = selfdata.sub + this.suberror.required;
+                    var fourmsg = selfdata.sub + this.suberror.four;
+                    var samemsg = selfdata.sub + this.suberror.same;
+
+                    if (selfdata.check.includes("required")) {
+                        this.checkWith(() => !selfdata.value, selfdata, emptymsg)
+                    }
+                    if (selfdata.check.includes("four") && selfdata.value) {
+                        this.checkWith(() => selfdata.value.length < 4, selfdata, fourmsg)
+                    }
+                    if (selfdata.check.includes("same") && selfdata.value) {
+                        this.checkWith(() => selfdata.value !== this.password.value, selfdata, samemsg)
+                    }
+                },
+                checkWith: function (invalid, data, msg) {
+                    if (invalid()) {
+                        this.checkInvalid(data, msg);
+                    }
+                    else {
+                        this.checkValid(data);
+                    }
+                },
+                checkValid: function (data) {
+                    data.error = "";
+                },
+                checkInvalid: function (data, msg) {
+                    data.error = msg;
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
