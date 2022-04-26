@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="vue.js"></script>
+</head>
+
+<body>
+    <div id="act-app">
+        <h1>{{greet}}</h1>
+        
+        <forget-pw :forget="forget" :url="url" style="background-color: cadetblue;"></forget-pw>
+    </div>
+
+    <script>
+        const sn = {
+            template: "<a>{{dsn}}</a>",
+            data () {
+                return {
+                    dsn: "forget sname..."
+                }
+            }
+        };
+
+        Vue.component("todo-item", {
+            template: `
+                <div>
+                    <li>{{dtodo}}</li>
+                    <forget-sn></forget-sn>
+                </div>
+            `,
+            data () {
+                return {
+                    dtodo: "this is a todo-list..."
+                }
+            },
+            components: {
+                "forget-sn": sn
+            }
+        });
+
+        const pw = {
+            template: `
+                <div>
+                    <a :href="url">{{forget}}</a>
+                    <todo-item></todo-item>
+                </div>
+            `,
+            data () {
+                return {
+                    dpw: "forget password..."
+                }
+            },
+            props: ["forget", "url"]
+        };
+
+        const vm = new Vue({
+            el: "#act-app",
+            data: {
+                greet: "hello, welcome...",
+                forget: "wowangle",
+                url: "https://www.baidu.com"
+            },
+            components: {
+                "forget-pw": pw
+            }
+        })
+    </script>
+</body>
+
+</html>
