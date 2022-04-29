@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="vue.js"></script>
+    <script src="mock.js"></script>
+    <script src="axios.js"></script>
+</head>
+
+<body>
+    <div id="act-app">
+        <h1>{{greet}}</h1>
+        
+        <todo-item @welcome="say" v-model="username">
+            <!-- todo...todo -->
+            <template v-slot:before>
+                <span>
+                    {{username}}
+                </span>
+            </template>
+            <template v-slot:default>,</template>
+            <template v-slot:after>222</template>
+        </todo-item>
+
+        <hr>
+
+        <keep-alive>
+            <component :is="show"></component>
+        </keep-alive>
+        
+        <enroll></enroll>
+
+        <input v-model="newitem" :id="newid">
+        <button @click.prevent="additem">add</button>
+        <ul>
+            <list v-for="(item, index) of todos" :key="item.id" :title="item.title" @del="todos.splice(index, 1);"></list>
+        </ul>
+    </div>
+
+    <script>
+        Mock.mock("/Student/12", {
+            sname: "leo"
+        });
+
+        Vue.component("enroll", function (resolve, reject) {
+            axios.get("/Student/12").then(response => {
+                resolve({
+                    template: `<label><input type="checkbox" />${response.data.sname}</label>`
+                })
+            });
+        });
+
+        var learn = {
+            template: `<p>start learn</p>`
+        };
+
+        Vue.component("todo-item", {
+            template: `
+            <div>
+                <a @click="greet">
+                    {{todo}}
+                    <span>^-^</span>
+                </a>
+                <input type="text" :value="inn" @input="$emit('cus', $event.target.value)" />
+                <p>
+                    <slot name="before">haha...</slot>    
+                    <slot></slot>    
+                    <slot name="after"></slot>    
+                </p>
+            </div>
+            `,
+            model: {
+                prop: "inn",
+                event: "cus"
+            },
+            data () {
+                return {
+                    //username: "ash"
+                }
+            },
+            props: ["todo", "inn"],
+            methods: {
+                greet: function () {
+                    //alert("welcome...");
+                    this.$emit("welcome", {
+                        sname: "leo"
+                    });
+                }
+            }
+        });
+
+        Vue.component("list", {
+            template: `<li>{{title}}<button @click.prevent="$emit('del')">X</button></li>`,
+            props: ["title"]
+        });
+
+        const vm = new Vue({
+            el: "#act-app",
+            data: {
+                greet: "hello, welcome...",
+                forget: "wowangle",
+                username: "ash",
+                show: "learn",
+                todos: [
+                    {
+                        id: 1,
+                        title: 'write'
+                    },
+                    {
+                        id: 2,
+                        title: 'read'
+                    },
+                    {
+                        id: 3,
+                        title: 'listen'
+                    }
+                ],
+                newitem: ""
+                
+            },
+            computed: {
+                newid: function () {
+                    var max = Math.max.apply(null, this.todos.map(v => v.id));
+                    return ++max;
+                }
+            },
+            methods: {
+                say: function (event) {
+                    alert("say:" + event.sname);
+                },
+                additem: function () {
+                    this.todos.push({id: this.newid, title: this.newitem});
+                },
+                // remove: function () {
+                //     this.todos.splice(index, 1);
+                // }
+            },
+            components: {
+                learn
+            }
+        })
+    </script>
+</body>
+
+</html>
