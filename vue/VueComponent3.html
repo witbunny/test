@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="vue.js"></script>
+</head>
+
+<body>
+    <div id="act-app">
+        <h1>{{sname}}</h1>
+        
+        <todo-item ref="todo"></todo-item>
+
+        
+        <act-circle :node="node"></act-circle>
+        
+    </div>
+
+    <script>
+        Vue.component("todo-item", {
+            template: `
+                <div>
+                    <p @click="hello">{{id}}</p>
+                    <enroll></enroll>
+                </div>
+            `,
+            data () {
+                return {
+                    id: 12
+                }
+            },
+            provide () {
+                return {
+                    id: this.id,
+                    hello: this.hello
+                }
+            },
+            methods: {
+                hello: function () {
+                    console.log(this.$root.sname);
+                }
+            }
+        });
+
+        Vue.component("enroll", {
+            template: `<a @mouseover="enroll">baodao <order></order></a>`,
+            methods: {
+                enroll: function () {
+                    console.log(this.$parent.id);
+                }
+            }
+        });
+
+        Vue.component("order", {
+            template: `<small @click="hello">time{{id}}</small>`,
+            inject: ["id", "hello"]
+        });
+
+        Vue.component("act-circle", {
+            template: `
+                <div v-if="node">
+                    <span>{{node.name}}</span>
+                    <ul>
+                        <li><act-circle :node="node.children"></act-circle></li>
+                    </ul>
+                </div>
+            `,
+            props: ["node"]
+        });
+
+        const vm = new Vue({
+            el: "#act-app",
+            data: {
+                sname: "leo",
+                node: {
+                    name: "gen",
+                    children: {
+                        name: "zhi",
+                        children: {
+                            name: "ye",
+                            children: null
+                        }
+                    }
+                }
+            },
+            mounted () {
+                console.log(this.$refs.todo.id);
+            }
+        })
+    </script>
+</body>
+
+</html>
